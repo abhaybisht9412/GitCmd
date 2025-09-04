@@ -1,0 +1,35 @@
+<project name="Node.js Jest Tests">
+  <buildType name="Node.js Jest Tests">
+    <description>Run Jest tests with coverage and report to TeamCity</description>
+
+    <!-- Build Steps -->
+    <steps>
+      <step name="Install dependencies" type="simpleRunner">
+        <scriptContent>npm install</scriptContent>
+      </step>
+      <step name="Run Tests with Jest" type="simpleRunner">
+        <scriptContent>npm run test:coverage</scriptContent>
+      </step>
+      <step name="Publish Coverage Report" type="simpleRunner">
+        <scriptContent>curl -X POST -F "file=@./coverage/lcov-report/index.html" https://your-teamcity-server.com/reports</scriptContent>
+      </step>
+    </steps>
+
+    <!-- Triggers -->
+    <triggers>
+      <trigger type="scheduleTrigger">
+        <schedule>
+          <id>Daily Build</id>
+          <type>daily</type>
+          <hour>0</hour>
+          <minute>0</minute>
+        </schedule>
+      </trigger>
+    </triggers>
+
+    <!-- Artifacts -->
+    <artifactPaths>
+      <path>coverage/**</path>
+    </artifactPaths>
+  </buildType>
+</project>
