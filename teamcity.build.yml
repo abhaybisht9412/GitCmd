@@ -1,0 +1,35 @@
+version: "1.0"
+
+project:
+  name: "Node.js Jest Tests"
+  buildTypes:
+    - name: "Node.js Jest Tests"
+      description: "Run Jest tests with coverage and report to TeamCity"
+
+      steps:
+        - name: "Install dependencies"
+          type: "simpleRunner"
+          scriptContent: |
+            npm install
+
+        - name: "Run Tests with Jest"
+          type: "simpleRunner"
+          scriptContent: |
+            npm run test:coverage
+
+        - name: "Publish Coverage Report"
+          type: "simpleRunner"
+          scriptContent: |
+            curl -X POST -F "file=@./coverage/lcov-report/index.html" https://your-teamcity-server.com/reports
+
+      triggers:
+        - type: "scheduleTrigger"
+          schedule:
+            id: "Daily Build"
+            type: "daily"
+            hour: 0
+            minute: 0
+
+      artifacts:
+        paths:
+          - "coverage/**"
