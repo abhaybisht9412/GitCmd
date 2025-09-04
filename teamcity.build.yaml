@@ -1,0 +1,26 @@
+version: 2022.10
+
+buildType:
+  name: "Node.js Jest Tests"
+  description: "Run Jest tests with coverage and report to TeamCity"
+  steps:
+    - name: "Install dependencies"
+      script: |
+        npm install
+    - name: "Run Tests with Jest"
+      script: |
+        npm run test:coverage
+    - name: "Publish Coverage Report"
+      script: |
+        curl -X POST -F "file=@./coverage/lcov-report/index.html" https://your-teamcity-server.com/reports
+
+  triggers:
+    - schedule:
+        id: "Daily Build"
+        type: "daily"
+        hour: 0
+        minute: 0
+
+  artifacts:
+    paths:
+      - coverage/**
