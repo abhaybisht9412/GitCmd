@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "jest-teamcity-reporter": "^0.9.0"
+  }
+}
